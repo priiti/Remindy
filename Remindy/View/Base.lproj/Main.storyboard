@@ -33,7 +33,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Remindy" id="8Jz-TB-TxS">
-                        <barButtonItem key="rightBarButtonItem" style="plain" systemItem="add" id="0ak-cY-kvS">
+                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="add" id="0ak-cY-kvS">
                             <color key="tintColor" red="0.20392156859999999" green="0.28627450980000002" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <connections>
                                 <action selector="addButtonPressed:" destination="AXK-PL-hvl" id="Fn1-7f-dJs"/>

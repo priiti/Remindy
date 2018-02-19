@@ -10,12 +10,14 @@ import UIKit
 
 class ReminderListViewController: UITableViewController {
 
-    var itemArray: [String] = ["Find food", "Sleep", "Go running"]
+    var itemsList: [ReminderItem] = [ReminderItem]()
     
+    let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        loadItemsData()
     }
 
     override func didReceiveMemoryWarning() {
@@ -26,14 +28,18 @@ class ReminderListViewController: UITableViewController {
     //MARK: Tableview Datasource Methods
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return itemArray.count
+        return itemsList.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "ReminderItemCell", for: indexPath)
         
-        cell.textLabel?.text = itemArray[indexPath.row]
+        let singleReminderItem = itemsList[indexPath.row]
+        
+        cell.textLabel?.text = singleReminderItem.title
+        
+        cell.accessoryType = singleReminderItem.done ? .checkmark : .none
         
         return cell
     }
@@ -42,12 +48,10 @@ class ReminderListViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        if tableView.cellForRow(at: indexPath)?.accessoryType == .checkmark {
-            tableView.cellForRow(at: indexPath)?.accessoryType = .none
-        } else {
-            tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
-        }
-            
+        itemsList[indexPath.row].done = !itemsList[indexPath.row].done
+        
+        saveItemsData()
+        
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
@@ -61,8 +65,11 @@ class ReminderListViewController: UITableViewController {
         
         let action = UIAlertAction(title: "Add item", style: .default) { (action) in
             
-            self.itemArray.append(textField.text!)
-            self.tableView.reloadData()
+            let newItem = ReminderItem(title: textField.text!)
+            
+            self.itemsList.append(newItem)
+            
+            self.saveItemsData()
         }
         
         alert.addTextField { (alertTextField) in
@@ -75,5 +82,32 @@ class ReminderListViewController: UITableViewController {
         present(alert, animated: true, completion: nil)
     }
     
+    //MARK: Model methods
+    
+    fileprivate func saveItemsData() {
+        let encoder = PropertyListEncoder()
+        
+        do {
+            let data = try encoder.encode(itemsList)
+            
+            try data.write(to: dataFilePath!)
+        } catch {
+            print("Error encoding item array, \(error)")
+        }
+        
+        self.tableView.reloadData()
+    }
+    
+    fileprivate func loadItemsData() {
+        if let data = try? Data(contentsOf: dataFilePath!) {
+            
+            let decoder = PropertyListDecoder()
+            
+            do {
+                itemsList = try decoder.decode([ReminderItem].self, from: data)
+            } catch {
+                print("Error decoding item array, \(error)")
+            }
+        }
+    }
 }
-
