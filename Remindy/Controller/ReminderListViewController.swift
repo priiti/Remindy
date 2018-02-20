@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class ReminderListViewController: UITableViewController {
 
@@ -14,8 +15,12 @@ class ReminderListViewController: UITableViewController {
     
     let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
     
+    let context = (UIApplication.shared.delegate as!
+        AppDelegate).persistentContainer.viewContext
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         
         loadItemsData()
     }
@@ -48,6 +53,11 @@ class ReminderListViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
+        
+        // context.delete(itemsList[indexPath.row])
+        // itemsList.remove(at: indexPath.row)
+        
+        
         itemsList[indexPath.row].done = !itemsList[indexPath.row].done
         
         saveItemsData()
@@ -64,9 +74,10 @@ class ReminderListViewController: UITableViewController {
         let alert = UIAlertController(title: "Add new reminder", message: "", preferredStyle: .alert)
         
         let action = UIAlertAction(title: "Add item", style: .default) { (action) in
-            
-            let newItem = ReminderItem(title: textField.text!)
-            
+
+            let newItem = ReminderItem(context: self.context)
+            newItem.title = textField.text!
+            newItem.done = false
             self.itemsList.append(newItem)
             
             self.saveItemsData()
@@ -85,29 +96,23 @@ class ReminderListViewController: UITableViewController {
     //MARK: Model methods
     
     fileprivate func saveItemsData() {
-        let encoder = PropertyListEncoder()
         
         do {
-            let data = try encoder.encode(itemsList)
-            
-            try data.write(to: dataFilePath!)
+            try self.context.save()
         } catch {
-            print("Error encoding item array, \(error)")
+            print("Error saving context \(error)")
         }
         
         self.tableView.reloadData()
     }
     
     fileprivate func loadItemsData() {
-        if let data = try? Data(contentsOf: dataFilePath!) {
-            
-            let decoder = PropertyListDecoder()
-            
-            do {
-                itemsList = try decoder.decode([ReminderItem].self, from: data)
-            } catch {
-                print("Error decoding item array, \(error)")
-            }
+        let request: NSFetchRequest<ReminderItem> = ReminderItem.fetchRequest()
+        
+        do {
+            itemsList = try context.fetch(request)
+        } catch {
+            print("Error fetching data \(error)")
         }
     }
 }
