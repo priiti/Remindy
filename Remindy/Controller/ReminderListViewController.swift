@@ -21,7 +21,6 @@ class ReminderListViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
         loadItemsData()
     }
 
@@ -30,7 +29,7 @@ class ReminderListViewController: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    //MARK: Tableview Datasource Methods
+    //MARK: - Tableview Datasource Methods
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return itemsList.count
@@ -49,7 +48,7 @@ class ReminderListViewController: UITableViewController {
         return cell
     }
     
-    //MARK: Tableview Delegate Methods
+    //MARK: - Tableview Delegate Methods
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
@@ -65,7 +64,7 @@ class ReminderListViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
-    //MARK: Add items
+    //MARK: - Add items
     
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
         
@@ -93,7 +92,7 @@ class ReminderListViewController: UITableViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    //MARK: Model methods
+    //MARK: - Model methods
     
     fileprivate func saveItemsData() {
         
@@ -106,13 +105,35 @@ class ReminderListViewController: UITableViewController {
         self.tableView.reloadData()
     }
     
-    fileprivate func loadItemsData() {
-        let request: NSFetchRequest<ReminderItem> = ReminderItem.fetchRequest()
-        
+    fileprivate func loadItemsData(with request: NSFetchRequest<ReminderItem> = ReminderItem.fetchRequest()) {
+       
         do {
             itemsList = try context.fetch(request)
         } catch {
             print("Error fetching data \(error)")
+        }
+        tableView.reloadData()
+    }
+}
+
+//MARK: - Search bar functionality
+extension ReminderListViewController: UISearchBarDelegate {
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        let request: NSFetchRequest<ReminderItem> = ReminderItem.fetchRequest()
+        request.predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
+        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+        
+        loadItemsData(with: request)
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchBar.text?.count == 0 {
+            loadItemsData()
+            
+            DispatchQueue.main.async {
+                searchBar.resignFirstResponder()
+            }
         }
     }
 }
