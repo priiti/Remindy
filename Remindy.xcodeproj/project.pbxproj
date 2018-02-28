@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A50F410120475E9B000394AB /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50F410020475E9B000394AB /* CategoryViewController.swift */; };
 		A57B30BF203CAAAA00EC316B /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A57B30BD203CAAAA00EC316B /* DataModel.xcdatamodeld */; };
 		A5A1A29C2038F6DB00E983F2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A1A29B2038F6DB00E983F2 /* AppDelegate.swift */; };
 		A5A1A29E2038F6DB00E983F2 /* ReminderListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A1A29D2038F6DB00E983F2 /* ReminderListViewController.swift */; };
@@ -16,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A50F410020475E9B000394AB /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
 		A57B30BE203CAAAA00EC316B /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
 		A5A1A2982038F6DB00E983F2 /* Remindy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Remindy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5A1A29B2038F6DB00E983F2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -48,6 +50,7 @@
 		A57B3099203B571C00EC316B /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				A50F410020475E9B000394AB /* CategoryViewController.swift */,
 				A5A1A29D2038F6DB00E983F2 /* ReminderListViewController.swift */,
 			);
 			path = Controller;
@@ -171,6 +174,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A50F410120475E9B000394AB /* CategoryViewController.swift in Sources */,
 				A5A1A29E2038F6DB00E983F2 /* ReminderListViewController.swift in Sources */,
 				A57B30BF203CAAAA00EC316B /* DataModel.xcdatamodeld in Sources */,
 				A5A1A29C2038F6DB00E983F2 /* AppDelegate.swift in Sources */,
