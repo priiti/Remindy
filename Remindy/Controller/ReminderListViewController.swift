@@ -13,6 +13,12 @@ class ReminderListViewController: UITableViewController {
 
     var itemsList: [ReminderItem] = [ReminderItem]()
     
+    var selectedCategory: Category? {
+        didSet {
+            loadItemsData()
+        }
+    }
+    
     let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
     
     let context = (UIApplication.shared.delegate as!
@@ -20,17 +26,13 @@ class ReminderListViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        loadItemsData()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     //MARK: - Tableview Datasource Methods
-    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return itemsList.count
     }
@@ -49,7 +51,6 @@ class ReminderListViewController: UITableViewController {
     }
     
     //MARK: - Tableview Delegate Methods
-    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         
@@ -65,7 +66,6 @@ class ReminderListViewController: UITableViewController {
     }
     
     //MARK: - Add items
-    
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
         
         var textField = UITextField()
@@ -77,14 +77,15 @@ class ReminderListViewController: UITableViewController {
             let newItem = ReminderItem(context: self.context)
             newItem.title = textField.text!
             newItem.done = false
+            newItem.parentCategory = self.selectedCategory
             self.itemsList.append(newItem)
             
             self.saveItemsData()
         }
         
         alert.addTextField { (alertTextField) in
-            alertTextField.placeholder = "Create new item"
             textField = alertTextField
+            alertTextField.placeholder = "Create new item"
         }
         
         alert.addAction(action)
@@ -97,7 +98,7 @@ class ReminderListViewController: UITableViewController {
     fileprivate func saveItemsData() {
         
         do {
-            try self.context.save()
+            try context.save()
         } catch {
             print("Error saving context \(error)")
         }
@@ -105,8 +106,18 @@ class ReminderListViewController: UITableViewController {
         self.tableView.reloadData()
     }
     
-    fileprivate func loadItemsData(with request: NSFetchRequest<ReminderItem> = ReminderItem.fetchRequest()) {
+    fileprivate func loadItemsData(with request: NSFetchRequest<ReminderItem> = ReminderItem.fetchRequest(),
+                                   predicate: NSPredicate? = nil) {
+        
+        let categoryPredicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory!.name!)
        
+        if let additionalPredicate = predicate {
+            request.predicate = NSCompoundPredicate(
+                andPredicateWithSubpredicates: [categoryPredicate, additionalPredicate])
+        } else {
+            request.predicate = categoryPredicate
+        }
+        
         do {
             itemsList = try context.fetch(request)
         } catch {
@@ -121,10 +132,11 @@ extension ReminderListViewController: UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         let request: NSFetchRequest<ReminderItem> = ReminderItem.fetchRequest()
-        request.predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
+        let predicate: NSPredicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
+        
         request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
         
-        loadItemsData(with: request)
+        loadItemsData(with: request, predicate: predicate)
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
