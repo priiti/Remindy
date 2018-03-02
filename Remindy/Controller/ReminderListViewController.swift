@@ -7,22 +7,21 @@
 //
 
 import UIKit
-import CoreData
+import RealmSwift
 
 class ReminderListViewController: UITableViewController {
 
-    var itemsList: [ReminderItem] = [ReminderItem]()
+    var itemsList: Results<ReminderItem>?
+    
+    let realm = try! Realm()
     
     var selectedCategory: Category? {
         didSet {
-            loadItemsData()
+             loadItemsData()
         }
     }
     
     let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
-    
-    let context = (UIApplication.shared.delegate as!
-        AppDelegate).persistentContainer.viewContext
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,18 +33,20 @@ class ReminderListViewController: UITableViewController {
     
     //MARK: - Tableview Datasource Methods
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return itemsList.count
+        return itemsList?.count ?? 1
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "ReminderItemCell", for: indexPath)
         
-        let singleReminderItem = itemsList[indexPath.row]
-        
-        cell.textLabel?.text = singleReminderItem.title
-        
-        cell.accessoryType = singleReminderItem.done ? .checkmark : .none
+        if let singleReminderItem = itemsList?[indexPath.row] {
+            cell.textLabel?.text = singleReminderItem.title
+            
+            cell.accessoryType = singleReminderItem.done ? .checkmark : .none
+        } else {
+            cell.textLabel?.text = "No items added"
+        }
         
         return cell
     }
@@ -53,15 +54,17 @@ class ReminderListViewController: UITableViewController {
     //MARK: - Tableview Delegate Methods
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
+        if let item = itemsList?[indexPath.row] {
+            do {
+                try realm.write {
+                    item.done = !item.done
+                }
+            } catch {
+                print("Error saving done status: \(error)")
+            }
+        }
         
-        // context.delete(itemsList[indexPath.row])
-        // itemsList.remove(at: indexPath.row)
-        
-        
-        itemsList[indexPath.row].done = !itemsList[indexPath.row].done
-        
-        saveItemsData()
-        
+        tableView.reloadData()
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
@@ -73,14 +76,19 @@ class ReminderListViewController: UITableViewController {
         let alert = UIAlertController(title: "Add new reminder", message: "", preferredStyle: .alert)
         
         let action = UIAlertAction(title: "Add item", style: .default) { (action) in
-
-            let newItem = ReminderItem(context: self.context)
-            newItem.title = textField.text!
-            newItem.done = false
-            newItem.parentCategory = self.selectedCategory
-            self.itemsList.append(newItem)
-            
-            self.saveItemsData()
+            if let currentCategory = self.selectedCategory {
+                do {
+                    try self.realm.write {
+                        let item = ReminderItem()
+                        item.title = textField.text!
+                        item.dateCreated = Date()
+                        currentCategory.reminderItems.append(item)
+                    }
+                } catch {
+                    print("Error saving new items: \(error)")
+                }
+            }
+            self.tableView.reloadData()
         }
         
         alert.addTextField { (alertTextField) in
@@ -95,50 +103,23 @@ class ReminderListViewController: UITableViewController {
     
     //MARK: - Model methods
     
-    fileprivate func saveItemsData() {
+    fileprivate func loadItemsData() {
+        itemsList = selectedCategory?.reminderItems.sorted(byKeyPath: "title", ascending: true)
         
-        do {
-            try context.save()
-        } catch {
-            print("Error saving context \(error)")
-        }
-        
-        self.tableView.reloadData()
-    }
-    
-    fileprivate func loadItemsData(with request: NSFetchRequest<ReminderItem> = ReminderItem.fetchRequest(),
-                                   predicate: NSPredicate? = nil) {
-        
-        let categoryPredicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory!.name!)
-       
-        if let additionalPredicate = predicate {
-            request.predicate = NSCompoundPredicate(
-                andPredicateWithSubpredicates: [categoryPredicate, additionalPredicate])
-        } else {
-            request.predicate = categoryPredicate
-        }
-        
-        do {
-            itemsList = try context.fetch(request)
-        } catch {
-            print("Error fetching data \(error)")
-        }
         tableView.reloadData()
     }
 }
 
 //MARK: - Search bar functionality
 extension ReminderListViewController: UISearchBarDelegate {
-    
+
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        let request: NSFetchRequest<ReminderItem> = ReminderItem.fetchRequest()
-        let predicate: NSPredicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
+        itemsList = itemsList?.filter("title CONTAINS[cd] %@", searchBar.text!)
+            .sorted(byKeyPath: "dateCreated", ascending: true)
         
-        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
-        
-        loadItemsData(with: request, predicate: predicate)
+        tableView.reloadData()
     }
-    
+
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchBar.text?.count == 0 {
             loadItemsData()

@@ -9,7 +9,8 @@
 /* Begin PBXBuildFile section */
 		912BEA1E028B4B2DB12C649E /* Pods_Remindy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA30B45CAE6A0DFDFE706C82 /* Pods_Remindy.framework */; };
 		A50F410120475E9B000394AB /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50F410020475E9B000394AB /* CategoryViewController.swift */; };
-		A57B30BF203CAAAA00EC316B /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A57B30BD203CAAAA00EC316B /* DataModel.xcdatamodeld */; };
+		A59ED18E2049FD9900742557 /* ReminderItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59ED18D2049FD9900742557 /* ReminderItem.swift */; };
+		A59ED1902049FDAD00742557 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59ED18F2049FDAD00742557 /* Category.swift */; };
 		A5A1A29C2038F6DB00E983F2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A1A29B2038F6DB00E983F2 /* AppDelegate.swift */; };
 		A5A1A29E2038F6DB00E983F2 /* ReminderListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A1A29D2038F6DB00E983F2 /* ReminderListViewController.swift */; };
 		A5A1A2A12038F6DB00E983F2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A5A1A29F2038F6DB00E983F2 /* Main.storyboard */; };
@@ -21,7 +22,8 @@
 		6D9A92BD8709E9FFDBD5E0BD /* Pods-Remindy.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Remindy.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Remindy/Pods-Remindy.debug.xcconfig"; sourceTree = "<group>"; };
 		A064F7F2DE1E63344809BC48 /* Pods-Remindy.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Remindy.release.xcconfig"; path = "Pods/Target Support Files/Pods-Remindy/Pods-Remindy.release.xcconfig"; sourceTree = "<group>"; };
 		A50F410020475E9B000394AB /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
-		A57B30BE203CAAAA00EC316B /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
+		A59ED18D2049FD9900742557 /* ReminderItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderItem.swift; sourceTree = "<group>"; };
+		A59ED18F2049FDAD00742557 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		A5A1A2982038F6DB00E983F2 /* Remindy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Remindy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5A1A29B2038F6DB00E983F2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A5A1A29D2038F6DB00E983F2 /* ReminderListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderListViewController.swift; sourceTree = "<group>"; };
@@ -64,7 +66,8 @@
 		A57B3098203B570700EC316B /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				A57B30BD203CAAAA00EC316B /* DataModel.xcdatamodeld */,
+				A59ED18F2049FDAD00742557 /* Category.swift */,
+				A59ED18D2049FD9900742557 /* ReminderItem.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -257,10 +260,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A59ED18E2049FD9900742557 /* ReminderItem.swift in Sources */,
 				A50F410120475E9B000394AB /* CategoryViewController.swift in Sources */,
 				A5A1A29E2038F6DB00E983F2 /* ReminderListViewController.swift in Sources */,
-				A57B30BF203CAAAA00EC316B /* DataModel.xcdatamodeld in Sources */,
 				A5A1A29C2038F6DB00E983F2 /* AppDelegate.swift in Sources */,
+				A59ED1902049FDAD00742557 /* Category.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -401,6 +405,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 446QLL5K6X;
 				INFOPLIST_FILE = Remindy/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.parlp.Remindy;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -417,6 +422,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 446QLL5K6X;
 				INFOPLIST_FILE = Remindy/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.parlp.Remindy;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -447,19 +453,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCVersionGroup section */
-		A57B30BD203CAAAA00EC316B /* DataModel.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				A57B30BE203CAAAA00EC316B /* DataModel.xcdatamodel */,
-			);
-			currentVersion = A57B30BE203CAAAA00EC316B /* DataModel.xcdatamodel */;
-			path = DataModel.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = A5A1A2902038F6DB00E983F2 /* Project object */;
 }
