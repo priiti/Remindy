@@ -11,5 +11,6 @@ import RealmSwift
 
 class Category: Object {
     @objc dynamic var name: String = ""
+    @objc dynamic var categoryCellColor: String = ""
     let reminderItems = List<ReminderItem>()
 }

@@ -8,8 +8,9 @@
 
 import UIKit
 import RealmSwift
+import ChameleonFramework
 
-class ReminderListViewController: UITableViewController {
+class ReminderListViewController: SwipeTableViewController {
 
     var itemsList: Results<ReminderItem>?
     
@@ -38,16 +39,27 @@ class ReminderListViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ReminderItemCell", for: indexPath)
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
         
-        if let singleReminderItem = itemsList?[indexPath.row] {
-            cell.textLabel?.text = singleReminderItem.title
-            
-            cell.accessoryType = singleReminderItem.done ? .checkmark : .none
-        } else {
+        guard let singleReminderItem = itemsList?[indexPath.row] else {
             cell.textLabel?.text = "No items added"
+            cell.backgroundColor = UIColor(hexString: "BFC7FA")
+            return cell
         }
         
+        cell.textLabel?.text = singleReminderItem.title
+        
+        guard let selectedCategoryColor = selectedCategory?.categoryCellColor else {
+            return cell
+        }
+        
+        guard let color = UIColor(hexString: selectedCategoryColor)?.darken(byPercentage: CGFloat(indexPath.row) / CGFloat((itemsList?.count)!)) else {
+            return cell
+        }
+        
+        cell.backgroundColor = color
+        cell.textLabel?.textColor = ContrastColorOf(color, returnFlat: true)
+
         return cell
     }
     
@@ -107,6 +119,18 @@ class ReminderListViewController: UITableViewController {
         itemsList = selectedCategory?.reminderItems.sorted(byKeyPath: "title", ascending: true)
         
         tableView.reloadData()
+    }
+    
+    override func updateModel(at indexPath: IndexPath) {
+        if let deletableReminderItem = itemsList?[indexPath.row] {
+            do {
+                try realm.write {
+                    realm.delete(deletableReminderItem)
+                }
+            } catch {
+                print("Error deleting item: \(error)")
+            }
+        }
     }
 }
 

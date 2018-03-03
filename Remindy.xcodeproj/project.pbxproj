@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		912BEA1E028B4B2DB12C649E /* Pods_Remindy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA30B45CAE6A0DFDFE706C82 /* Pods_Remindy.framework */; };
 		A50F410120475E9B000394AB /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50F410020475E9B000394AB /* CategoryViewController.swift */; };
+		A5269850204AAAA500054820 /* SwipeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A526984F204AAAA500054820 /* SwipeTableViewController.swift */; };
 		A59ED18E2049FD9900742557 /* ReminderItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59ED18D2049FD9900742557 /* ReminderItem.swift */; };
 		A59ED1902049FDAD00742557 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59ED18F2049FDAD00742557 /* Category.swift */; };
 		A5A1A29C2038F6DB00E983F2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A1A29B2038F6DB00E983F2 /* AppDelegate.swift */; };
@@ -22,6 +23,7 @@
 		6D9A92BD8709E9FFDBD5E0BD /* Pods-Remindy.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Remindy.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Remindy/Pods-Remindy.debug.xcconfig"; sourceTree = "<group>"; };
 		A064F7F2DE1E63344809BC48 /* Pods-Remindy.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Remindy.release.xcconfig"; path = "Pods/Target Support Files/Pods-Remindy/Pods-Remindy.release.xcconfig"; sourceTree = "<group>"; };
 		A50F410020475E9B000394AB /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
+		A526984F204AAAA500054820 /* SwipeTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeTableViewController.swift; sourceTree = "<group>"; };
 		A59ED18D2049FD9900742557 /* ReminderItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderItem.swift; sourceTree = "<group>"; };
 		A59ED18F2049FDAD00742557 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		A5A1A2982038F6DB00E983F2 /* Remindy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Remindy.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -77,6 +79,7 @@
 			children = (
 				A50F410020475E9B000394AB /* CategoryViewController.swift */,
 				A5A1A29D2038F6DB00E983F2 /* ReminderListViewController.swift */,
+				A526984F204AAAA500054820 /* SwipeTableViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -207,13 +210,17 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Remindy/Pods-Remindy-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/ChameleonFramework/ChameleonFramework.framework",
 				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
 				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/SwipeCellKit/SwipeCellKit.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ChameleonFramework.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwipeCellKit.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -264,6 +271,7 @@
 				A50F410120475E9B000394AB /* CategoryViewController.swift in Sources */,
 				A5A1A29E2038F6DB00E983F2 /* ReminderListViewController.swift in Sources */,
 				A5A1A29C2038F6DB00E983F2 /* AppDelegate.swift in Sources */,
+				A5269850204AAAA500054820 /* SwipeTableViewController.swift in Sources */,
 				A59ED1902049FDAD00742557 /* Category.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

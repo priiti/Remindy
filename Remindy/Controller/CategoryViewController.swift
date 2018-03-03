@@ -8,8 +8,9 @@
 
 import UIKit
 import RealmSwift
+import ChameleonFramework
 
-class CategoryViewController: UITableViewController {
+class CategoryViewController: SwipeTableViewController {
     
     let realm = try! Realm()
     
@@ -17,7 +18,6 @@ class CategoryViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         loadCategoryData()
     }
     
@@ -28,10 +28,15 @@ class CategoryViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell", for: indexPath)
-        
-        cell.textLabel?.text = categoryList?[indexPath.row].name ?? "No categories added"
-        cell.accessoryType = .none
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
+        if let category = categoryList?[indexPath.row] {
+            cell.textLabel?.text = category.name
+            cell.accessoryType = .none
+            cell.backgroundColor = UIColor(hexString: category.categoryCellColor)
+        } else {
+            cell.textLabel?.text = "No categories added"
+            cell.backgroundColor = UIColor(hexString: "BFC7FA")
+        }
         
         return cell
     }
@@ -55,6 +60,18 @@ class CategoryViewController: UITableViewController {
         tableView.reloadData()
     }
     
+    override func updateModel(at indexPath: IndexPath) {
+        if let deletableCategory = self.categoryList?[indexPath.row] {
+            do {
+                try realm.write {
+                    realm.delete(deletableCategory)
+                }
+            } catch {
+                print("Error deleting category: \(error)")
+            }
+        }
+    }
+    
     //MARK: - Add New Categories
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
         var textField = UITextField()
@@ -65,6 +82,7 @@ class CategoryViewController: UITableViewController {
             
             let newCategory = Category()
             newCategory.name = textField.text!
+            newCategory.categoryCellColor = UIColor.randomFlat.hexValue()
             
             self.saveCategoryData(category: newCategory)
         }
@@ -77,13 +95,11 @@ class CategoryViewController: UITableViewController {
         alert.addAction(action)
         
         present(alert, animated: true, completion: nil)
-    
     }
     
     //MARK: - TableView Delegate Methods
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         performSegue(withIdentifier: "goToReminderItems", sender: self)
-
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
