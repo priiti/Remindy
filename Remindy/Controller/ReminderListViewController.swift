@@ -14,6 +14,8 @@ class ReminderListViewController: SwipeTableViewController {
 
     var itemsList: Results<ReminderItem>?
     
+    @IBOutlet weak var searchBar: UISearchBar!
+    
     let realm = try! Realm()
     
     var selectedCategory: Category? {
@@ -26,6 +28,36 @@ class ReminderListViewController: SwipeTableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        title = selectedCategory?.name
+        
+        guard let colorHex = selectedCategory?.categoryCellColor else { fatalError() }
+        
+        updateNavBar(withHexCode: colorHex)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        
+        updateNavBar(withHexCode: "3D53FF")
+    }
+    
+    //MARK: - Navbar Setup Methods
+    func updateNavBar(withHexCode colorHexCode: String) {
+        guard let navBar = navigationController?.navigationBar else {
+            fatalError("Navigation controller does not exist")
+        }
+        
+        title = selectedCategory?.name
+        
+        guard let navBarColor = UIColor(hexString: colorHexCode) else { fatalError() }
+        
+        navBar.tintColor = ContrastColorOf(navBarColor, returnFlat: true)
+        navBar.barTintColor = navBarColor
+        navBar.largeTitleTextAttributes =
+            [NSAttributedStringKey.foregroundColor: ContrastColorOf(navBarColor, returnFlat: true)]
+        searchBar.barTintColor = navBarColor
     }
 
     override func didReceiveMemoryWarning() {
@@ -53,13 +85,15 @@ class ReminderListViewController: SwipeTableViewController {
             return cell
         }
         
-        guard let color = UIColor(hexString: selectedCategoryColor)?.darken(byPercentage: CGFloat(indexPath.row) / CGFloat((itemsList?.count)!)) else {
+        guard let color = UIColor(hexString: selectedCategoryColor)?.darken(
+            byPercentage: CGFloat(indexPath.row) / CGFloat((itemsList?.count)!)) else {
             return cell
         }
         
         cell.backgroundColor = color
         cell.textLabel?.textColor = ContrastColorOf(color, returnFlat: true)
-
+        cell.accessoryType = singleReminderItem.done ? .checkmark : .none
+        cell.tintColor = ContrastColorOf(color, returnFlat: true)
         return cell
     }
     
@@ -103,7 +137,7 @@ class ReminderListViewController: SwipeTableViewController {
             self.tableView.reloadData()
         }
         
-        alert.addTextField { (alertTextField) in
+        alert.addTextField { alertTextField in
             textField = alertTextField
             alertTextField.placeholder = "Create new item"
         }
@@ -114,7 +148,6 @@ class ReminderListViewController: SwipeTableViewController {
     }
     
     //MARK: - Model methods
-    
     fileprivate func loadItemsData() {
         itemsList = selectedCategory?.reminderItems.sorted(byKeyPath: "title", ascending: true)
         
@@ -136,7 +169,6 @@ class ReminderListViewController: SwipeTableViewController {
 
 //MARK: - Search bar functionality
 extension ReminderListViewController: UISearchBarDelegate {
-
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         itemsList = itemsList?.filter("title CONTAINS[cd] %@", searchBar.text!)
             .sorted(byKeyPath: "dateCreated", ascending: true)

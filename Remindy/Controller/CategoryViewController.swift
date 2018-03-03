@@ -31,11 +31,15 @@ class CategoryViewController: SwipeTableViewController {
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
         if let category = categoryList?[indexPath.row] {
             cell.textLabel?.text = category.name
+            
+            guard let categoryColor = UIColor(hexString: category.categoryCellColor) else { fatalError() }
+            
+            cell.textLabel?.textColor = ContrastColorOf(categoryColor, returnFlat: true)
             cell.accessoryType = .none
-            cell.backgroundColor = UIColor(hexString: category.categoryCellColor)
+            cell.backgroundColor = categoryColor
         } else {
             cell.textLabel?.text = "No categories added"
-            cell.backgroundColor = UIColor(hexString: "BFC7FA")
+            cell.backgroundColor = UIColor(hexString: "3D53FF")
         }
         
         return cell
@@ -63,6 +67,10 @@ class CategoryViewController: SwipeTableViewController {
     override func updateModel(at indexPath: IndexPath) {
         if let deletableCategory = self.categoryList?[indexPath.row] {
             do {
+                let deletableChildItems = deletableCategory.reminderItems
+                try realm.write {
+                    realm.delete(deletableChildItems)
+                }
                 try realm.write {
                     realm.delete(deletableCategory)
                 }
