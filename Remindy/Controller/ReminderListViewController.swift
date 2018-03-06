@@ -20,7 +20,8 @@ class ReminderListViewController: SwipeTableViewController {
     
     var selectedCategory: Category? {
         didSet {
-             loadItemsData()
+            updateViewBackgroundColor(withHexCode: selectedCategory?.categoryCellColor)
+            loadItemsData()
         }
     }
     
@@ -39,11 +40,10 @@ class ReminderListViewController: SwipeTableViewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        
-        updateNavBar(withHexCode: "3D53FF")
+        updateNavBar(withHexCode: HexColor.defaultBackgroundColor.rawValue)
     }
     
-    //MARK: - Navbar Setup Methods
+    //MARK: - Color Setup Methods
     func updateNavBar(withHexCode colorHexCode: String) {
         guard let navBar = navigationController?.navigationBar else {
             fatalError("Navigation controller does not exist")
@@ -75,7 +75,7 @@ class ReminderListViewController: SwipeTableViewController {
         
         guard let singleReminderItem = itemsList?[indexPath.row] else {
             cell.textLabel?.text = "No items added"
-            cell.backgroundColor = UIColor(hexString: "BFC7FA")
+            cell.backgroundColor = UIColor.white
             return cell
         }
         
@@ -168,7 +168,15 @@ class ReminderListViewController: SwipeTableViewController {
 }
 
 //MARK: - Search bar functionality
-extension ReminderListViewController: UISearchBarDelegate {
+extension ReminderListViewController: UISearchBarDelegate, ViewDelegate {
+    func updateViewBackgroundColor(withHexCode colorHexCode: String?) {
+        guard let bgColor = colorHexCode else {
+            view.backgroundColor = UIColor.white
+            return
+        }
+        view.backgroundColor = UIColor(hexString: bgColor)
+    }
+    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         itemsList = itemsList?.filter("title CONTAINS[cd] %@", searchBar.text!)
             .sorted(byKeyPath: "dateCreated", ascending: true)

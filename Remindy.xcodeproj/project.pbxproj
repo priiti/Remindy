@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		912BEA1E028B4B2DB12C649E /* Pods_Remindy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA30B45CAE6A0DFDFE706C82 /* Pods_Remindy.framework */; };
 		A50F410120475E9B000394AB /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50F410020475E9B000394AB /* CategoryViewController.swift */; };
+		A5207167204F253600002B5B /* ViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5207166204F253600002B5B /* ViewDelegate.swift */; };
+		A520716A204F262B00002B5B /* Enumerations.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5207169204F262B00002B5B /* Enumerations.swift */; };
 		A5269850204AAAA500054820 /* SwipeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A526984F204AAAA500054820 /* SwipeTableViewController.swift */; };
 		A59ED18E2049FD9900742557 /* ReminderItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59ED18D2049FD9900742557 /* ReminderItem.swift */; };
 		A59ED1902049FDAD00742557 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59ED18F2049FDAD00742557 /* Category.swift */; };
@@ -23,6 +25,8 @@
 		6D9A92BD8709E9FFDBD5E0BD /* Pods-Remindy.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Remindy.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Remindy/Pods-Remindy.debug.xcconfig"; sourceTree = "<group>"; };
 		A064F7F2DE1E63344809BC48 /* Pods-Remindy.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Remindy.release.xcconfig"; path = "Pods/Target Support Files/Pods-Remindy/Pods-Remindy.release.xcconfig"; sourceTree = "<group>"; };
 		A50F410020475E9B000394AB /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
+		A5207166204F253600002B5B /* ViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewDelegate.swift; sourceTree = "<group>"; };
+		A5207169204F262B00002B5B /* Enumerations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enumerations.swift; sourceTree = "<group>"; };
 		A526984F204AAAA500054820 /* SwipeTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeTableViewController.swift; sourceTree = "<group>"; };
 		A59ED18D2049FD9900742557 /* ReminderItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderItem.swift; sourceTree = "<group>"; };
 		A59ED18F2049FDAD00742557 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
@@ -63,6 +67,22 @@
 				CA30B45CAE6A0DFDFE706C82 /* Pods_Remindy.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A5207165204F252600002B5B /* Delegates */ = {
+			isa = PBXGroup;
+			children = (
+				A5207166204F253600002B5B /* ViewDelegate.swift */,
+			);
+			path = Delegates;
+			sourceTree = "<group>";
+		};
+		A5207168204F261900002B5B /* Enumerations */ = {
+			isa = PBXGroup;
+			children = (
+				A5207169204F262B00002B5B /* Enumerations.swift */,
+			);
+			path = Enumerations;
 			sourceTree = "<group>";
 		};
 		A57B3098203B570700EC316B /* Model */ = {
@@ -122,6 +142,8 @@
 		A5A1A29A2038F6DB00E983F2 /* Remindy */ = {
 			isa = PBXGroup;
 			children = (
+				A5207168204F261900002B5B /* Enumerations */,
+				A5207165204F252600002B5B /* Delegates */,
 				A5A1A29B2038F6DB00E983F2 /* AppDelegate.swift */,
 				A57B3099203B571C00EC316B /* Controller */,
 				A57B309A203B573700EC316B /* View */,
@@ -270,9 +292,11 @@
 				A59ED18E2049FD9900742557 /* ReminderItem.swift in Sources */,
 				A50F410120475E9B000394AB /* CategoryViewController.swift in Sources */,
 				A5A1A29E2038F6DB00E983F2 /* ReminderListViewController.swift in Sources */,
+				A5207167204F253600002B5B /* ViewDelegate.swift in Sources */,
 				A5A1A29C2038F6DB00E983F2 /* AppDelegate.swift in Sources */,
 				A5269850204AAAA500054820 /* SwipeTableViewController.swift in Sources */,
 				A59ED1902049FDAD00742557 /* Category.swift in Sources */,
+				A520716A204F262B00002B5B /* Enumerations.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

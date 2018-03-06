@@ -18,6 +18,7 @@ class CategoryViewController: SwipeTableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        updateViewBackgroundColor(withHexCode: HexColor.defaultBackgroundColor.rawValue)
         loadCategoryData()
     }
     
@@ -39,7 +40,7 @@ class CategoryViewController: SwipeTableViewController {
             cell.backgroundColor = categoryColor
         } else {
             cell.textLabel?.text = "No categories added"
-            cell.backgroundColor = UIColor(hexString: "3D53FF")
+            cell.backgroundColor = UIColor(hexString: HexColor.defaultBackgroundColor.rawValue)
         }
         
         return cell
@@ -91,7 +92,7 @@ class CategoryViewController: SwipeTableViewController {
             let newCategory = Category()
             newCategory.name = textField.text!
             newCategory.categoryCellColor = UIColor.randomFlat.hexValue()
-            
+           
             self.saveCategoryData(category: newCategory)
         }
         
@@ -117,4 +118,16 @@ class CategoryViewController: SwipeTableViewController {
             destinationVC.selectedCategory = categoryList?[indexPath.row]
         }
     }
+}
+
+extension CategoryViewController: ViewDelegate {
+    func updateViewBackgroundColor(withHexCode colorHexCode: String?) {
+        guard let bgColor = colorHexCode else {
+            view.backgroundColor = UIColor.white
+            return
+        }
+        view.backgroundColor = UIColor(hexString: bgColor)
+    }
+    
+    
 }
